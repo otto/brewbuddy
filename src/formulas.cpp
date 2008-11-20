@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 using namespace std;
 namespace Formula
 {
@@ -47,12 +48,35 @@ namespace Formula
 			return SG + hydrometerCorrectionValue(f_temp);
 		}
 	}
-	const string srmToRGB[] = {"000000", "F3F993","F5F75C","F6F513","EAE615","E0D01B",
-										"D5BC26","CDAA37","C1963C","BE8C3A","BE823A",
-										"C17A37","BF7138","BC6733","B26033","A85839",
-										"985336","8D4C32","7C452D","6B3A1E","5D341A",
-										"4E2A0C","4A2727","361F1B","261716","231716",
-										"19100F","16100F","120D0C","100B0A","050B0A"};
+									
+	namespace Color
+	{
+		static const string srmToRGBTable[] = {"F3F993","F5F75C","F6F513","EAE615","E0D01B",
+												"D5BC26","CDAA37","C1963C","BE8C3A","BE823A",
+												"C17A37","BF7138","BC6733","B26033","A85839",
+												"985336","8D4C32","7C452D","6B3A1E","5D341A",
+												"4E2A0C","4A2727","361F1B","261716","231716",
+												"19100F","16100F","120D0C","100B0A","050B0A"};
+								
+		string srmToRGB(const float srm)
+		{
+			if(srm <= 30)
+				if(srm >= 1)
+					return srmToRGBTable[(int)(srm)-1];
+			return "000000";
+		}
+		
+		float srmToEBC(const float srm)
+		{
+			return srm * 1.97;
+		}
+		
+		float ebcToSRM(const float ebc)
+		{
+			return ebc * 0.508;
+		}
+		
+	}
 }
 
 
@@ -67,6 +91,6 @@ cout << "ABW: " << Formula::Alcohol::ABW(og,sg) << endl;
 cout << "ftoc: " << Formula::Temperature::ftoc(32) << "  ctof: " << Formula::Temperature::ctof(0) << endl;
 cout << "hydrometer adjust 1.051 at 77F: " << Formula::Alcohol::hydrometerAdjustment(1.051, 59) << endl;
 cout << "hydrometer adjust 1.051 at 77F: " << Formula::Alcohol::hydrometerAdjustment(1.051, 77) << endl;
-cout << "SRM 1 to RGB: " << Formula::srmToRGB[1] << " SRM 30 to RGB: " << Formula::srmToRGB[30] << endl;
+cout << "SRM 1 to RGB: " << Formula::Color::srmToRGB(1.1) << " SRM 30 to RGB: " << Formula::Color::srmToRGB(29.8) << endl;
 return 0;
 }
