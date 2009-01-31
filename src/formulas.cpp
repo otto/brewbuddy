@@ -61,9 +61,12 @@ namespace Formula
 		string srmToRGB(const float srm)
 		{
 			if(srm <= 30)
+			{
 				if(srm >= 1)
 					return srmToRGBTable[(int)(srm)-1];
-			return "000000";
+				return "000000";
+			}
+			return "FFFFFF";
 		}
 		
 		float srmToEBC(const float srm)
@@ -91,6 +94,7 @@ cout << "ABW: " << Formula::Alcohol::ABW(og,sg) << endl;
 cout << "ftoc: " << Formula::Temperature::ftoc(32) << "  ctof: " << Formula::Temperature::ctof(0) << endl;
 cout << "hydrometer adjust 1.051 at 77F: " << Formula::Alcohol::hydrometerAdjustment(1.051, 59) << endl;
 cout << "hydrometer adjust 1.051 at 77F: " << Formula::Alcohol::hydrometerAdjustment(1.051, 77) << endl;
-cout << "SRM 1 to RGB: " << Formula::Color::srmToRGB(1.1) << " SRM 30 to RGB: " << Formula::Color::srmToRGB(29.8) << endl;
+cout << "SRM 1.1 to RGB: " << Formula::Color::srmToRGB(1.1) << " SRM 29.8 to RGB: " << Formula::Color::srmToRGB(29.8) << endl;
+cout << "SRM 0.1 to RGB: " << Formula::Color::srmToRGB(0.1) << " SRM 38 to RGB: " << Formula::Color::srmToRGB(38) << endl;
 return 0;
 }
