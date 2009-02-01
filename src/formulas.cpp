@@ -47,8 +47,46 @@ namespace Formula
 		{
 			return SG + hydrometerCorrectionValue(f_temp);
 		}
+		
+		float gravityToPlato(const float SG)
+		{
+			return ((-463.37) + (668.72 * SG) - (205.35 * SG * SG));
+		}
+		
+		float realExtract(const float OG, const float FG)
+		{
+			return ((0.1808 * gravityToPlato(OG)) + (0.8192 * gravityToPlato(FG)));
+		}
+		
+		float apparentAttenuation(const float OG, const float FG)
+		{
+			return (1 - (gravityToPlato(FG) / gravityToPlato(OG)));
+		}
+		
+		float realAttenuation(const float OG, const float FG)
+		{
+			return (1 - (realExtract(OG, FG) / gravityToPlato(OG)));
+		}
+		
+		//cal per 12 oz beer = [(6.9 × ABW) + 4.0 × (RE - 0.1)] × FG × 3.55   
+		float estimateCalories(const float OG, const float FG)
+		{
+			return ( ((6.9 * ABW(OG,FG)) + 4.0 * (realExtract(OG, FG) - 0.1)) * FG * 3.55 );
+		}
+		
+		/*float estimateOG()
+		{}
+		
+		float estimateFG()
+		{}*/
 	}
-									
+	
+	namespace Bitterness
+	{
+		float estimateIBU()
+		{}
+	}
+										
 	namespace Color
 	{
 		static const string srmToRGBTable[] = {"F3F993","F5F75C","F6F513","EAE615","E0D01B",
@@ -96,5 +134,6 @@ cout << "hydrometer adjust 1.051 at 77F: " << Formula::Alcohol::hydrometerAdjust
 cout << "hydrometer adjust 1.051 at 77F: " << Formula::Alcohol::hydrometerAdjustment(1.051, 77) << endl;
 cout << "SRM 1.1 to RGB: " << Formula::Color::srmToRGB(1.1) << " SRM 29.8 to RGB: " << Formula::Color::srmToRGB(29.8) << endl;
 cout << "SRM 0.1 to RGB: " << Formula::Color::srmToRGB(0.1) << " SRM 38 to RGB: " << Formula::Color::srmToRGB(38) << endl;
+cout << "Calories for 1070 1015: " << Formula::Alcohol::estimateCalories(1.070,1.015) << endl;
 return 0;
 }
